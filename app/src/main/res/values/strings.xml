@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">projet_balat_monge</string>
+    <string name="demande_numero">Entrez le numero</string>
+    <string name="zone_message">Tapez le message</string>
+    <string name="label_numero">Numero</string>
+    <string name="label_message">Message</string>
+    <string name="label_envoyer">Envoyer</string>
+</resources>

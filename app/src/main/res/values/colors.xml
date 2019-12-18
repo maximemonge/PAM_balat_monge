@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="gris_moyen">#333333</color>
+    <color name="orange">#FF8C00</color>
+    <color name="gris">#999999</color>
+    <color name="gris_clair">#E1E1E1</color>
+    <color name="noir">#000000</color>
+    <color name="blanc">#FFFFFF</color>
+</resources>

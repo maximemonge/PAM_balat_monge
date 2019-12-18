@@ -1,0 +1,15 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/gris</item>
+        <item name="colorPrimaryDark">@color/gris</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title" parent="android:TextAppearance">
+        <item name="android:textColor">@color/gris_moyen</item>
+    </style>
+
+</resources>

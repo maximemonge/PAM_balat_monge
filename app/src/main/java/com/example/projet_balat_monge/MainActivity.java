@@ -37,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendSms(View view) {
         EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
-
-        String message = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
+        String contenuMessage = getResources().getString(R.string.contenusms);
+        String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
+        String message = contenuMessage + locationChoisie;
         String numero = numeroText.getText().toString();
 
         String[] parts = numero.split(";");

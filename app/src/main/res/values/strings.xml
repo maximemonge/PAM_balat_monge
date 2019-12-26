@@ -3,4 +3,5 @@
     <string name="demande_numero">Entrez le numero</string>
     <string name="label_numero">Numero</string>
     <string name="label_envoyer">Envoyer la position actuelle</string>
+    <string name="contenusms">Bonjour, un rendez-vous vous est proposé à cette adresse : </string>
 </resources>

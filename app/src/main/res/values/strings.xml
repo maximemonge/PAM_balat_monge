@@ -3,4 +3,7 @@
     <string name="demande_numero">Entrez le numero</string>
     <string name="label_numero">Numero</string>
     <string name="label_envoyer">Envoyer la position actuelle</string>
+    <string name="label_oui">Oui</string>
+    <string name="label_non">Non</string>
+    <string name="label_retour">Retour</string>
 </resources>

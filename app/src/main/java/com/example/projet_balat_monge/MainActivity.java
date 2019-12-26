@@ -6,12 +6,16 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +51,14 @@ public class MainActivity extends AppCompatActivity {
         else {
             Toast.makeText(context, "Erreur : numéro incorrect ou message vide", duration).show();
         }
+    }
+
+    public void confirmationRDV(View view) {
+        Intent intent = new Intent(this, ConfirmationRDV.class);
+        String numero = "5556";
+        intent.putExtra("numPersDemandeRDV", numero);
+        startActivity(intent);
+
     }
 
     private void verifierPermission() {

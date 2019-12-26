@@ -31,31 +31,6 @@
             android:hint="@string/demande_numero"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/textViewMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/label_message"
-            android:textColor="@color/orange" />
-
-        <EditText
-            android:id="@+id/editTextMessage"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginRight="3dp"
-            android:layout_marginLeft="3dp"
-            android:paddingLeft="10dp"
-            android:background="@color/blanc"
-            android:gravity="center_vertical"
-            android:hint="@string/zone_message"
-            android:inputType="textPersonName"/>
-    </LinearLayout>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

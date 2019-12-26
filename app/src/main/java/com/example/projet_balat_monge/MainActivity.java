@@ -24,15 +24,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendSms(View view) {
         EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
-        EditText messageText = (EditText) findViewById(R.id.editTextMessage);
-        String message = messageText.getText().toString();
+        String message = "toto";
         String numero = numeroText.getText().toString();
 
         String[] parts = numero.split(";");
 
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
-        if (!message.isEmpty() && contientQuatreChiffresMinimum(numero)) {
+        if (!message.isEmpty()) {
             try {
                 SmsManager smgr = SmsManager.getDefault();
                 for (String numeroTel : parts) {
@@ -60,21 +59,5 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
             }
         }
-    }
-
-    private boolean contientQuatreChiffresMinimum(String num) {
-        int compteur = 0;
-        for (int index = 0; index < num.length(); index++) {
-            if (Character.isDigit(num.charAt(index))) {
-                compteur ++;
-            }
-            else {
-                return false;
-            }
-        }
-        if (compteur >= 4) {
-            return true;
-        }
-        return false;
     }
 }

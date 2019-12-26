@@ -2,6 +2,7 @@ package com.example.projet_balat_monge;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 
 public class MainActivity extends AppCompatActivity {
     private GoogleMap map;
@@ -59,7 +61,16 @@ public class MainActivity extends AppCompatActivity {
             }
     }
 
+    public void confirmationRDV(View view) {
+        Intent intent = new Intent(this, ConfirmationRDV.class);
+        String numero = "5556";
+        intent.putExtra("numPersDemandeRDV", numero);
+        startActivity(intent);
+
+    }
+
     private void verifierPermissionSms() {
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
                 // Ne rien faire

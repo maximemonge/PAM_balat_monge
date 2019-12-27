@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,17 +25,22 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class MainActivity extends AppCompatActivity {
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
-    private Double latitude = 0.0;
-    private Double longitude = 0.0;
+    private Double latitude;
+    private Double longitude;
+
+    private Intent intentMaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.intentMaps = new Intent(this, MapsActivity.class);
         setContentView(R.layout.activity_main);
+        initialiserLocalisation();
+        latitude = 0.0;
+        longitude = 0.0;
         verifierPermissionSms();
         verifierPermissionInternet();
         verifierPermissionAccessFineLocation();
-        initialiserLocalisation();
     }
 
     public void sendSms(View view) {
@@ -48,17 +54,17 @@ public class MainActivity extends AppCompatActivity {
 
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
-            try {
-                SmsManager smgr = SmsManager.getDefault();
-                for (String numeroTel : parts) {
-                    smgr.sendTextMessage(numeroTel, null, message, null, null);
-                }
-                Toast.makeText(context, "Message envoyé", duration).show();
+        try {
+            SmsManager smgr = SmsManager.getDefault();
+            for (String numeroTel : parts) {
+                smgr.sendTextMessage(numeroTel, null, message, null, null);
             }
-            catch (Exception e){
-                ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
-                Toast.makeText(context, "Échec de l'envoi", duration).show();
-            }
+            Toast.makeText(context, "Message envoyé", duration).show();
+        }
+        catch (Exception e){
+            ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS);
+            Toast.makeText(context, "Échec de l'envoi", duration).show();
+        }
     }
 
     public void confirmationRDV(View view) {
@@ -122,5 +128,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void ouvrirMap(View view) {
+        intentMaps.putExtra("latitude", latitude);
+        intentMaps.putExtra("longitude", longitude);
+        startActivity(intentMaps);
     }
 }

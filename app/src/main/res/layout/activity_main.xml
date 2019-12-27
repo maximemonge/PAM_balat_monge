@@ -37,6 +37,11 @@
         android:text="@string/label_envoyer"
         android:onClick="sendSms"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_choisir_coord_rdv"
+        android:onClick="ouvrirMap"/>
 
     <Button
         android:layout_width="match_parent"

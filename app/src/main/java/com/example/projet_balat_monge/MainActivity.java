@@ -26,6 +26,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import static java.lang.System.exit;
+
 
 public class MainActivity extends AppCompatActivity {
     private GoogleMap map;
@@ -54,11 +56,20 @@ public class MainActivity extends AppCompatActivity {
         verifierPermissionReadContact();
         verifierPermissionAccessFineLocation();
         verifierPermissionServiceTelephone();
-        String url = "http://projet_balat_monge.com/confirmerdv/" + mPhoneNumber;
-        intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+        //String url = "http://projet_balat_monge.com/confirmerdv/" + mPhoneNumber;
+        //intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     }
 
     public void sendSms(View view) {
+
+        //On récupère ici le numéro de téléphone de la personne qui envoie le rendez_vous
+        EditText monNumero = (EditText) findViewById(R.id.editTextMonNumero);
+        mPhoneNumber = monNumero.getText().toString();
+
+        String url = "http://projet_balat_monge.com/confirmerdv/" + mPhoneNumber;
+        intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
         EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
         String contenuMessage = getResources().getString(R.string.contenusms);
         String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
@@ -188,9 +199,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             case 2:
-                System.out.println("retour");
                 if (resultCode == RESULT_OK){
-                    System.out.println("Je vais faire le traitement");
                     // On récupère le lien qui pointe vers le contact que nous avons choisit
                     Uri contactChoisitUri = data.getData();
                     //On récupère les numérors des contacts
@@ -206,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
 
                     // On insere le numéro dans l'EditText
                     EditText editNum = (EditText) findViewById(R.id.editTextNumero);
-                    System.out.println("Edit text : " + editNum.getText());
                     if (editNum.getText().length() < 1 ) {
                         editNum.setText(numero);
                     }

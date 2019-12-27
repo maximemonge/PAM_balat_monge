@@ -21,8 +21,7 @@ public class ConfirmationRDV extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirmation_rdv);
         Uri url = getIntent().getData();
-        String numero = String.valueOf(url).replace("http://projet_balat_monge.com/confirmerdv/", "");
-        System.out.println(numero);
+        numero = String.valueOf(url).replace("http://projet_balat_monge.com/confirmerdv/", "");
     }
 
     public void confirmationOui(View view){
@@ -40,8 +39,7 @@ public class ConfirmationRDV extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
         try {
             SmsManager smgr = SmsManager.getDefault();
-
-                smgr.sendTextMessage(numero, null, "Je serais présent au rendez-vous!", null, null);
+            smgr.sendTextMessage(numero, null, "Je serais présent(e) au rendez-vous!", null, null);
 
             Toast.makeText(context, "Message envoyé", duration).show();
         }
@@ -69,7 +67,7 @@ public class ConfirmationRDV extends AppCompatActivity {
         try {
             SmsManager smgr = SmsManager.getDefault();
 
-            smgr.sendTextMessage(numero, null, "Je ne serais pas présent au rendez-vous!", null, null);
+            smgr.sendTextMessage(numero, null, "Je ne serais pas présent(e) au rendez-vous!", null, null);
 
             Toast.makeText(context, "Message envoyé", duration).show();
         }

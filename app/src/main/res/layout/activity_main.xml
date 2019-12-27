@@ -43,6 +43,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_mon_numero"
+            android:textColor="@color/orange"
+            android:layout_marginTop="20dp"/>
+        <EditText
+            android:id="@+id/editTextMonNumero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blanc"
+            android:layout_marginBottom="20dp"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -2,9 +2,11 @@
     <string name="app_name">projet_balat_monge</string>
     <string name="demande_numero">Entrez le numero</string>
     <string name="label_numero">Numero</string>
-    <string name="label_envoyer">Envoyer la position actuelle</string>
+    <string name="label_envoyer">Envoyer la position</string>
     <string name="contenusms">Bonjour, un rendez-vous vous est proposé à cette adresse : </string>
     <string name="label_oui">Oui</string>
     <string name="label_non">Non</string>
-    <string name="label_choisir_coord_rdv">Choisir un lieu de rendez-vous</string>
+    <string name="label_choisir_coord_rdv">Choisir lieu</string>
+    <string name="label_latitude">Latitude</string>
+    <string name="label_longitude">Longitude</string>
 </resources>

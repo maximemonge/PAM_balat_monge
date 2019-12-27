@@ -16,11 +16,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Double latitude;
     private Double longitude;
+    private Intent intentMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        this.intentMain = new Intent(this, MainActivity.class);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -49,5 +51,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng position = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(position).title("Vous êtes ici"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng point) {
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions().position(point));
+                intentMain.putExtra("point", point);
+                setResult(1, intentMain);
+                finish();
+            }
+        });
     }
 }

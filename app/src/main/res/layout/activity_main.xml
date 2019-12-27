@@ -31,17 +31,53 @@
             android:hint="@string/demande_numero"/>
     </LinearLayout>
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/label_envoyer"
-        android:onClick="sendSms"/>
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_latitude"
+            android:textColor="@color/orange"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/textViewLat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blanc"
+            android:layout_marginBottom="20dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_longitude"
+            android:textColor="@color/orange"/>
+        <TextView
+            android:id="@+id/textViewLong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blanc"
+            android:layout_marginBottom="20dp"/>
+    </LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_choisir_coord_rdv"
-        android:onClick="ouvrirMap"/>
+        android:layout_gravity="center">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:onClick="ouvrirMap"
+            android:text="@string/label_choisir_coord_rdv" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:onClick="sendSms"
+            android:text="@string/label_envoyer" />
+    </LinearLayout>
 
     <Button
         android:layout_width="match_parent"

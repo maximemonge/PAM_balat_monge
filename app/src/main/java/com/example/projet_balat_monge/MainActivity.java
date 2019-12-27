@@ -7,27 +7,33 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.common.util.NumberUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 
 public class MainActivity extends AppCompatActivity {
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
+    private TextView textViewLatitude;
+    private TextView textViewLongitude;
     private Double latitude;
     private Double longitude;
-
     private Intent intentMaps;
 
     @Override
@@ -38,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         initialiserLocalisation();
         latitude = 0.0;
         longitude = 0.0;
+        textViewLatitude = (TextView) findViewById(R.id.textViewLat);
+        textViewLongitude = (TextView) findViewById(R.id.textViewLong);
         verifierPermissionSms();
         verifierPermissionInternet();
         verifierPermissionAccessFineLocation();
@@ -125,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 if (location != null) {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
+                    editerLatLong();
                 }
             }
         });
@@ -133,6 +142,23 @@ public class MainActivity extends AppCompatActivity {
     public void ouvrirMap(View view) {
         intentMaps.putExtra("latitude", latitude);
         intentMaps.putExtra("longitude", longitude);
-        startActivity(intentMaps);
+        startActivityForResult(intentMaps, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 1 && requestCode == 1) {
+            if (data.hasExtra("point")) {
+                LatLng point = (LatLng) data.getExtras().get("point");
+                latitude = point.latitude;
+                longitude = point.longitude;
+                editerLatLong();
+            }
+        }
+    }
+
+    private void editerLatLong() {
+        textViewLatitude.setText(String.valueOf(latitude));
+        textViewLongitude.setText(String.valueOf(longitude));
     }
 }

@@ -6,4 +6,5 @@
     <string name="contenusms">Bonjour, un rendez-vous vous est proposé à cette adresse : </string>
     <string name="label_oui">Oui</string>
     <string name="label_non">Non</string>
+    <string name="label_contact">Contact</string>
 </resources>

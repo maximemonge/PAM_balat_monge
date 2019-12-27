@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private Double latitude = 0.0;
     private Double longitude = 0.0;
+    static final int PICK_CONTACT_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,32 +35,53 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         verifierPermissionSms();
         verifierPermissionInternet();
+        verifierPermissionReadContact();
         verifierPermissionAccessFineLocation();
-        initialiserLocalisation();
     }
 
     public void sendSms(View view) {
-        EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
-        String contenuMessage = getResources().getString(R.string.contenusms);
-        String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
-        String message = contenuMessage + locationChoisie;
-        String numero = numeroText.getText().toString();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        System.out.println("Bjr");
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
 
-        String[] parts = numero.split(";");
+            @Override
+            public void onSuccess(Location location) {
+                System.out.println("Bjr");
+                if (location != null) {
+                    System.out.println("Bjr");
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
+                    String contenuMessage = getResources().getString(R.string.contenusms);
+                    String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
+                    String message = contenuMessage + locationChoisie;
+                    String numero = numeroText.getText().toString();
 
-        Context context = getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-            try {
-                SmsManager smgr = SmsManager.getDefault();
-                for (String numeroTel : parts) {
-                    smgr.sendTextMessage(numeroTel, null, message, null, null);
+                    String[] parts = numero.split(";");
+
+                    Context context = getApplicationContext();
+                    int duration = Toast.LENGTH_SHORT;
+                    try {
+                        SmsManager smgr = SmsManager.getDefault();
+                        for (String numeroTel : parts) {
+                            smgr.sendTextMessage(numeroTel, null, message, null, null);
+                        }
+                        Toast.makeText(context, "Message envoyé", duration).show();
+                    }
+                    catch (Exception e){
+                        ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS);
+                        Toast.makeText(context, "Échec de l'envoi", duration).show();
+                    }
                 }
-                Toast.makeText(context, "Message envoyé", duration).show();
             }
-            catch (Exception e){
-                ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
-                Toast.makeText(context, "Échec de l'envoi", duration).show();
-            }
+        });
+
+    }
+
+    public void choisirContact(View view){
+        Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+        //pickContactIntent.setType(Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
+        startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
     }
 
     public void confirmationRDV(View view) {
@@ -78,6 +101,18 @@ public class MainActivity extends AppCompatActivity {
 
             else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
+            }
+        }
+    }
+
+    public void  verifierPermissionReadContact(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+                // Ne rien faire
+            }
+
+            else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
             }
         }
     }
@@ -108,19 +143,5 @@ public class MainActivity extends AppCompatActivity {
                 map.getUiSettings().setMyLocationButtonEnabled(false);
             }
         }
-    }
-
-    private void initialiserLocalisation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                }
-            }
-        });
     }
 }

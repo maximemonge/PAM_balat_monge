@@ -206,7 +206,13 @@ public class MainActivity extends AppCompatActivity {
 
                     // On insere le numéro dans l'EditText
                     EditText editNum = (EditText) findViewById(R.id.editTextNumero);
-                    editNum.setText(numero);
+                    System.out.println("Edit text : " + editNum.getText());
+                    if (editNum.getText().length() < 1 ) {
+                        editNum.setText(numero);
+                    }
+                    else {
+                        editNum.setText(editNum.getText() + ";" + numero);
+                    }
                 }
         }
 

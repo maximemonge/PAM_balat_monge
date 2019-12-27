@@ -39,7 +39,7 @@ public class ConfirmationRDV extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
         try {
             SmsManager smgr = SmsManager.getDefault();
-            smgr.sendTextMessage(numero, null, "Je serais présent(e) au rendez-vous!", null, null);
+            smgr.sendTextMessage(numero, null, "Je serai présent(e) au rendez-vous !", null, null);
 
             Toast.makeText(context, "Message envoyé", duration).show();
         }
@@ -67,7 +67,7 @@ public class ConfirmationRDV extends AppCompatActivity {
         try {
             SmsManager smgr = SmsManager.getDefault();
 
-            smgr.sendTextMessage(numero, null, "Je ne serais pas présent(e) au rendez-vous!", null, null);
+            smgr.sendTextMessage(numero, null, "Je ne serai pas présent(e) au rendez-vous!", null, null);
 
             Toast.makeText(context, "Message envoyé", duration).show();
         }

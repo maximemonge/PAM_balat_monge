@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.EditText;
@@ -74,8 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void choisirContact(View view){
         Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
-        //pickContactIntent.setType(Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
+        System.out.println("Je suis ici");
+        pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
+        System.out.println("Je suis ici");
         startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
+        System.out.println("Je suis ici");
     }
 
     public void confirmationRDV(View view) {

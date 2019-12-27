@@ -25,14 +25,19 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class MainActivity extends AppCompatActivity {
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
-    private Double latitude = 0.0;
-    private Double longitude = 0.0;
     static final int PICK_CONTACT_REQUEST = 1;
+    private Double latitude;
+    private Double longitude;
+    private Intent intentMaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.intentMaps = new Intent(this, MapsActivity.class);
         setContentView(R.layout.activity_main);
+        initialiserLocalisation();
+        latitude = 0.0;
+        longitude = 0.0;
         verifierPermissionSms();
         verifierPermissionInternet();
         verifierPermissionReadContact();
@@ -67,16 +72,35 @@ public class MainActivity extends AppCompatActivity {
                             smgr.sendTextMessage(numeroTel, null, message, null, null);
                         }
                         Toast.makeText(context, "Message envoyé", duration).show();
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS);
                         Toast.makeText(context, "Échec de l'envoi", duration).show();
                     }
+                }
+
+                EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
+                String contenuMessage = getResources().getString(R.string.contenusms);
+                String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
+                String message = contenuMessage + locationChoisie;
+                String numero = numeroText.getText().toString();
+
+                String[] parts = numero.split(";");
+
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_SHORT;
+                try {
+                    SmsManager smgr = SmsManager.getDefault();
+                    for (String numeroTel : parts) {
+                        smgr.sendTextMessage(numeroTel, null, message, null, null);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
 
     }
+
 
     public void choisirContact(View view){
         Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
@@ -143,5 +167,25 @@ public class MainActivity extends AppCompatActivity {
                 map.getUiSettings().setMyLocationButtonEnabled(false);
             }
         }
+    }
+
+    private void initialiserLocalisation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                }
+            }
+        });
+    }
+
+    public void ouvrirMap(View view) {
+        intentMaps.putExtra("latitude", latitude);
+        intentMaps.putExtra("longitude", longitude);
+        startActivity(intentMaps);
     }
 }

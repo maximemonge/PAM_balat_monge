@@ -7,4 +7,5 @@
     <string name="label_oui">Oui</string>
     <string name="label_non">Non</string>
     <string name="label_contact">Contact</string>
+    <string name="label_choisir_coord_rdv">Choisir un lieu de rendez-vous</string>
 </resources>

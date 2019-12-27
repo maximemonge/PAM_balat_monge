@@ -9,4 +9,5 @@
     <string name="label_choisir_coord_rdv">Choisir lieu</string>
     <string name="label_latitude">Latitude</string>
     <string name="label_longitude">Longitude</string>
+    <string name="label_contact">Contact</string>
 </resources>

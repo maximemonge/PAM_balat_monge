@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.common.util.NumberUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private TextView textViewLatitude;
     private TextView textViewLongitude;
+    static final int PICK_CONTACT_REQUEST = 1;
     private Double latitude;
     private Double longitude;
     private Intent intentMaps;
@@ -48,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         textViewLongitude = (TextView) findViewById(R.id.textViewLong);
         verifierPermissionSms();
         verifierPermissionInternet();
+        verifierPermissionReadContact();
         verifierPermissionAccessFineLocation();
     }
 
@@ -67,12 +66,16 @@ public class MainActivity extends AppCompatActivity {
             for (String numeroTel : parts) {
                 smgr.sendTextMessage(numeroTel, null, message, null, null);
             }
-            Toast.makeText(context, "Message envoyé", duration).show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e){
-            ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS);
-            Toast.makeText(context, "Échec de l'envoi", duration).show();
-        }
+    }
+
+
+    public void choisirContact(View view){
+        Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+        //pickContactIntent.setType(Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
+        startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
     }
 
     public void confirmationRDV(View view) {
@@ -92,6 +95,18 @@ public class MainActivity extends AppCompatActivity {
 
             else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
+            }
+        }
+    }
+
+    public void  verifierPermissionReadContact(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+                // Ne rien faire
+            }
+
+            else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
             }
         }
     }

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private Double latitude;
     private Double longitude;
     private Intent intentMaps;
+    private Intent intentConfirm;
+    private String mPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +52,18 @@ public class MainActivity extends AppCompatActivity {
         verifierPermissionInternet();
         verifierPermissionReadContact();
         verifierPermissionAccessFineLocation();
+        verifierPermissionServiceTelephone();
+        String url = "http://projet_balat_monge.com/confirmerdv/" + mPhoneNumber;
+        intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     }
 
     public void sendSms(View view) {
         EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
         String contenuMessage = getResources().getString(R.string.contenusms);
         String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
-        String message = contenuMessage + locationChoisie;
+        String confirmation = " Confirmez ici " + intentConfirm.getData();
+        String message = contenuMessage + locationChoisie + confirmation;
         String numero = numeroText.getText().toString();
-
         String[] parts = numero.split(";");
 
         Context context = getApplicationContext();
@@ -67,8 +73,10 @@ public class MainActivity extends AppCompatActivity {
             for (String numeroTel : parts) {
                 smgr.sendTextMessage(numeroTel, null, message, null, null);
             }
+            Toast.makeText(context, "Message envoyé", duration).show();
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(context, "Échec de l'envoi", duration).show();
         }
     }
 
@@ -80,14 +88,6 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Je suis ici");
         startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
         System.out.println("Je suis ici");
-    }
-
-    public void confirmationRDV(View view) {
-        Intent intent = new Intent(this, ConfirmationRDV.class);
-        String numero = "5556";
-        intent.putExtra("numPersDemandeRDV", numero);
-        startActivity(intent);
-
     }
 
     private void verifierPermissionSms() {
@@ -139,6 +139,19 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 map.setMyLocationEnabled(false);
                 map.getUiSettings().setMyLocationButtonEnabled(false);
+            }
+        }
+    }
+
+    private void verifierPermissionServiceTelephone() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
+                TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+                mPhoneNumber = tMgr.getLine1Number();
+            }
+
+            else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
             }
         }
     }

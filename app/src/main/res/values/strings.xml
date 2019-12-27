@@ -3,7 +3,8 @@
     <string name="demande_numero">Entrez le numero</string>
     <string name="label_numero">Numero</string>
     <string name="label_envoyer">Envoyer la position</string>
-    <string name="contenusms">Bonjour, un rendez-vous vous est proposé à cette adresse : </string>
+    <string name="contenusms">Un rendez-vous vous est proposé ici : </string>
+    <string name="confirmationrdv">Veuillez confirmer votre présence ici : </string>
     <string name="label_oui">Oui</string>
     <string name="label_non">Non</string>
     <string name="label_choisir_coord_rdv">Choisir lieu</string>

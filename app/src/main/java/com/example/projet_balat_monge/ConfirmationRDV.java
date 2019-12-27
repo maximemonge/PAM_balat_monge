@@ -2,6 +2,7 @@ package com.example.projet_balat_monge;
 
 import android.Manifest;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
@@ -13,21 +14,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 public class ConfirmationRDV extends AppCompatActivity {
-
     String numero;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.confirmation_rdv);
-
-        /** On recupère le numéro de la personne qui nous a envoyer le rendez-vous dans l'intent*/
-        numero =  getIntent().getStringExtra("numPersDemandeRDV");
-
+        Uri url = getIntent().getData();
+        String numero = String.valueOf(url).replace("http://projet_balat_monge.com/confirmerdv/", "");
+        System.out.println(numero);
     }
-
-
 
     public void confirmationOui(View view){
 

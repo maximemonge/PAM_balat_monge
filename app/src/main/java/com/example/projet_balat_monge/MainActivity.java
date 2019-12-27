@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private TextView textViewLatitude;
     private TextView textViewLongitude;
-    static final int PICK_CONTACT_REQUEST = 1;
+    static final int PICK_CONTACT_REQUEST = 2;
     private Double latitude;
     private Double longitude;
     private Intent intentMaps;
@@ -83,11 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void choisirContact(View view){
         Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
-        System.out.println("Je suis ici");
-        pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
-        System.out.println("Je suis ici");
+        pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); // Permet de lister le nom des contacts
         startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
-        System.out.println("Je suis ici");
     }
 
     private void verifierPermissionSms() {
@@ -179,14 +177,40 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 1 && requestCode == 1) {
-            if (data.hasExtra("point")) {
-                LatLng point = (LatLng) data.getExtras().get("point");
-                latitude = point.latitude;
-                longitude = point.longitude;
-                editerLatLong();
-            }
+        switch(requestCode) {
+            case 1:
+                if (resultCode == 1) {
+                    if (data.hasExtra("point")) {
+                        LatLng point = (LatLng) data.getExtras().get("point");
+                        latitude = point.latitude;
+                        longitude = point.longitude;
+                        editerLatLong();
+                    }
+                }
+            case 2:
+                System.out.println("retour");
+                if (resultCode == RESULT_OK){
+                    System.out.println("Je vais faire le traitement");
+                    // On récupère le lien qui pointe vers le contact que nous avons choisit
+                    Uri contactChoisitUri = data.getData();
+                    //On récupère les numérors des contacts
+                    String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER};
+
+                    // On cherche le numéro du contact que l'on a choisit
+                    Cursor cursor = getContentResolver().query(contactChoisitUri, projection, null, null, null);
+                    cursor.moveToFirst();
+
+                    // On recupère le numéro
+                    int recupNumero = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                    String numero = cursor.getString(recupNumero);
+
+                    // On insere le numéro dans l'EditText
+                    EditText editNum = (EditText) findViewById(R.id.editTextNumero);
+                    editNum.setText(numero);
+                }
         }
+
+
     }
 
     private void editerLatLong() {

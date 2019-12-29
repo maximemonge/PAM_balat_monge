@@ -61,15 +61,20 @@ public class MainActivity extends AppCompatActivity {
         //intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     }
 
+    /*
+        Permet d'envoyer le SMS contenant le rendez_vous géolocalisé
+     */
     public void sendSms(View view) {
 
         //On récupère ici le numéro de téléphone de la personne qui envoie le rendez_vous
         EditText monNumero = (EditText) findViewById(R.id.editTextMonNumero);
         mPhoneNumber = monNumero.getText().toString();
 
+        //On créer ici le lien permettant au destinataire de confirmer ou refuser le rendez_vous
         String url = "http://projet_balat_monge.com/confirmerdv/" + mPhoneNumber;
         intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 
+        //Prépatation du contenu du message
         EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
         String contenuMessage = getResources().getString(R.string.contenusms);
         String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
         try {
             SmsManager smgr = SmsManager.getDefault();
+            //Envoie du message pour chaque destinataire
             for (String numeroTel : parts) {
                 smgr.sendTextMessage(numeroTel, null, message, null, null);
             }
@@ -92,13 +98,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /*
+        Permet de choisir un contact parmis la liste de contact présent dans l'application de contact de l'utilisateur
+    */
     public void choisirContact(View view){
         Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
-        pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); // Permet de lister le nom des contacts
+        // Permet de lister le nom des contacts
+        pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
         startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
     }
 
+    /*
+        Permet de vérifier la permission d'envoie de SMS
+     */
     private void verifierPermissionSms() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
@@ -112,6 +124,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /*
+        Permet de vérifier la permission de lire les contacts
+     */
     public void  verifierPermissionReadContact(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
@@ -124,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /*
+        Permet de vérifier la permission d'accès à Internet
+     */
     private void verifierPermissionInternet() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
@@ -136,6 +156,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /*
+        Permet de vérifier la permission d'acces à la localisation de l'utilisateur
+     */
     private void verifierPermissionAccessFineLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -152,6 +176,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /*
+        Permet de vérifier la permission d'avoir des informations sur la téléphone de l'utilisateur
+        Cette partie ne sera pas utiliser dans notre projet vu qu'il est impossible de connaître le numéro de téléphone de l'utilisataur via les données de son téléphone
+     */
     private void verifierPermissionServiceTelephone() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
@@ -165,6 +194,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*
+        Permet d'initialiser la position de l'utilisateur
+     */
     private void initialiserLocalisation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -180,6 +212,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /*
+        Permet d'ouvrir la carte GoogleMaps avec les coordonées du rendez-vous
+     */
     public void ouvrirMap(View view) {
         intentMaps.putExtra("latitude", latitude);
         intentMaps.putExtra("longitude", longitude);
@@ -189,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
+            //Permet de récupérer la longitute et la latitude choisit sur la carte
             case 1:
                 if (resultCode == 1) {
                     if (data.hasExtra("point")) {
@@ -198,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                         editerLatLong();
                     }
                 }
+             // Permet de récupère le contact/destinaire sur lequel on a cliqué dans notre application de contact
             case 2:
                 if (resultCode == RESULT_OK){
                     // On récupère le lien qui pointe vers le contact que nous avons choisit
@@ -227,6 +264,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
+        Permet de mettre à jour la latitude et la longitude
+     */
     private void editerLatLong() {
         textViewLatitude.setText(String.valueOf(latitude));
         textViewLongitude.setText(String.valueOf(longitude));

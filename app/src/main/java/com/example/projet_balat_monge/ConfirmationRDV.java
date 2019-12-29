@@ -24,6 +24,10 @@ public class ConfirmationRDV extends AppCompatActivity {
         numero = String.valueOf(url).replace("http://projet_balat_monge.com/confirmerdv/", "");
     }
 
+
+    /*
+        Permet de confirmer le rendez-vous proposé par notre interlocuteur
+     */
     public void confirmationOui(View view){
 
         TextView choix = (TextView) findViewById(R.id.choixAcceptationRDV);
@@ -51,6 +55,10 @@ public class ConfirmationRDV extends AppCompatActivity {
 
     }
 
+
+    /*
+        Permet de refuser le rendez-vous proposé par notre interlocuteur
+     */
     public void confirmationNon (View view){
 
         TextView choix = (TextView) findViewById(R.id.choixAcceptationRDV);

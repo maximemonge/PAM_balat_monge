@@ -81,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
             for (String numeroTel : parts) {
                 smgr.sendTextMessage(numeroTel, null, message, null, null);
             }
-            Toast.makeText(context, "Message envoyé", duration).show();
+            Toast.makeText(context, getResources().getString(R.string.label_message_envoye), duration).show();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(context, "Échec de l'envoi", duration).show();
+            Toast.makeText(context, getResources().getString(R.string.label_erreur_envoi_sms), duration).show();
         }
     }
 
@@ -98,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*
-        Permet de vérifier la permission d'envoi de SMS
-     */
+    Permet de vérifier la permission d'envoi de SMS
+    */
     private void verifierPermissionSms() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
@@ -111,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*
-        Permet de vérifier la permission de lire les contacts
-     */
-    public void  verifierPermissionReadContact(){
+    Permet de vérifier la permission de lire les contacts
+    */
+    private void  verifierPermissionReadContact(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
@@ -123,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*
-        Permet de vérifier la permission d'accès à Internet
-     */
+    Permet de vérifier la permission d'accès à Internet
+    */
     private void verifierPermissionInternet() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*
-        Permet de vérifier la permission d'accès à la localisation de l'utilisateur
+    Permet de vérifier la permission d'accès à la localisation de l'utilisateur
     */
     private void verifierPermissionAccessFineLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*
-        Permet d'initialiser la localisation de l'utilisateur sur sa position actuelle
+    Permet d'initialiser la localisation de l'utilisateur sur sa position actuelle
     */
     private void initialiserLocalisation() {
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*
-        Permet de mettre à jour la latitude et la longitude
+    Permet de mettre à jour la latitude et la longitude
     */
     private void editerLatLong() {
         textViewLatitude.setText(String.valueOf(latitude));

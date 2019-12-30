@@ -7,9 +7,15 @@
     <string name="confirmationrdv">Veuillez confirmer votre présence ici : </string>
     <string name="label_oui">Oui</string>
     <string name="label_non">Non</string>
+    <string name="label_message_envoye">Message envoyé</string>
+    <string name="label_erreur_envoi_sms">Échec : message non envoyé</string>
     <string name="label_choisir_coord_rdv">Choisir lieu</string>
     <string name="label_latitude">Latitude</string>
     <string name="label_longitude">Longitude</string>
     <string name="label_contact">Contact</string>
     <string name="label_mon_numero">Veuillez insérer votre numéro pour pouvoir recevoir la réponse de votre interlocuteur</string>
+    <string name="rdv_accepte">Vous avez accepté le rendez-vous !</string>
+    <string name="sms_rdv_accepte">Je serai présent(e) au rendez-vous !</string>
+    <string name="rdv_refuse">Vous avez accepté le rendez-vous !</string>
+    <string name="sms_rdv_refuse">Je ne serai pas présent(e) au rendez-vous !</string>
 </resources>

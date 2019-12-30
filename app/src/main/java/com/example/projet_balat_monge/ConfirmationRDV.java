@@ -24,14 +24,16 @@ public class ConfirmationRDV extends AppCompatActivity {
         numero = String.valueOf(url).replace("http://projet_balat_monge.com/confirmerdv/", "");
     }
 
-
-    /*
-        Permet de confirmer le rendez-vous proposé par notre interlocuteur
-     */
+    /**
+     * Permet de confirmer le rendez-vous proposé par notre interlocuteur
+     * Bloque les boutons une fois qu'un des deux a été pressé
+     * Envoie un sms en fonction du bouton choisi
+     * Un toaster nous confirme si le message a été envoyé ou non
+    */
     public void confirmationOui(View view){
 
         TextView choix = (TextView) findViewById(R.id.choixAcceptationRDV);
-        choix.setText("Vous avez accepté le rendez-vous!");
+        choix.setText(getResources().getString(R.string.rdv_accepte));
 
         Button oui = (Button) findViewById(R.id.acceptationOui);
         Button non = (Button) findViewById(R.id.acceptationNon);
@@ -43,26 +45,27 @@ public class ConfirmationRDV extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
         try {
             SmsManager smgr = SmsManager.getDefault();
-            smgr.sendTextMessage(numero, null, "Je serai présent(e) au rendez-vous !", null, null);
+            smgr.sendTextMessage(numero, null, getResources().getString(R.string.sms_rdv_accepte), null, null);
 
-            Toast.makeText(context, "Message envoyé", duration).show();
+            Toast.makeText(context, getResources().getString(R.string.label_message_envoye), duration).show();
         }
         catch (Exception e){
             int checkPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
-            Toast.makeText(context, "Échec de l'envoi", duration).show();
+            Toast.makeText(context, getResources().getString(R.string.label_erreur_envoi_sms), duration).show();
         }
-
-
     }
 
 
-    /*
-        Permet de refuser le rendez-vous proposé par notre interlocuteur
-     */
+    /**
+     * Permet de refuser le rendez-vous proposé par notre interlocuteur
+     * Bloque les boutons une fois qu'un des deux a été pressé
+     * Envoie un sms en fonction du bouton choisi
+     * Un toaster nous confirme si le message a été envoyé ou non
+    */
     public void confirmationNon (View view){
 
         TextView choix = (TextView) findViewById(R.id.choixAcceptationRDV);
-        choix.setText("Vous avez refusé le rendez-vous!");
+        choix.setText(getResources().getString(R.string.rdv_refuse));
 
         Button oui = (Button) findViewById(R.id.acceptationOui);
         Button non = (Button) findViewById(R.id.acceptationNon);
@@ -75,13 +78,13 @@ public class ConfirmationRDV extends AppCompatActivity {
         try {
             SmsManager smgr = SmsManager.getDefault();
 
-            smgr.sendTextMessage(numero, null, "Je ne serai pas présent(e) au rendez-vous!", null, null);
+            smgr.sendTextMessage(numero, null, getResources().getString(R.string.sms_rdv_refuse), null, null);
 
-            Toast.makeText(context, "Message envoyé", duration).show();
+            Toast.makeText(context, getResources().getString(R.string.label_message_envoye), duration).show();
         }
         catch (Exception e){
             int checkPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
-            Toast.makeText(context, "Échec de l'envoi", duration).show();
+            Toast.makeText(context, getResources().getString(R.string.label_erreur_envoi_sms), duration).show();
         }
     }
 }

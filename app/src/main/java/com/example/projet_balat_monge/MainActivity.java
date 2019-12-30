@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
         EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
         String contenuMessage = getResources().getString(R.string.contenusms);
         String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
-        String confirmation = " Confirmez ici " + intentConfirm.getData();
-        String message = contenuMessage + locationChoisie + confirmation;
+        String messageUn = contenuMessage + locationChoisie;
+        String messageDeux = getResources().getString(R.string.message_confirmation) + intentConfirm.getData();
         String numero = numeroText.getText().toString();
         String[] parts = numero.split(";");
 
@@ -79,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             SmsManager smgr = SmsManager.getDefault();
             for (String numeroTel : parts) {
-                smgr.sendTextMessage(numeroTel, null, message, null, null);
+                smgr.sendTextMessage(numeroTel, null, messageUn, null, null);
+                smgr.sendTextMessage(numeroTel, null, messageDeux, null, null);
             }
             Toast.makeText(context, getResources().getString(R.string.label_message_envoye), duration).show();
         } catch (Exception e) {

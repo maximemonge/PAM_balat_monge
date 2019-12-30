@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
-import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,24 +21,18 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import static java.lang.System.exit;
-
 
 public class MainActivity extends AppCompatActivity {
-    private GoogleMap map;
-    private FusedLocationProviderClient fusedLocationClient;
     private TextView textViewLatitude;
     private TextView textViewLongitude;
-    static final int PICK_CONTACT_REQUEST = 2;
+    static final int CHOISIR_LOCALISATION = 1;
+    static final int CHOISIR_CONTACT = 2;
     private Double latitude;
     private Double longitude;
     private Intent intentMaps;
-    private Intent intentConfirm;
-    private String mPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,26 +48,24 @@ public class MainActivity extends AppCompatActivity {
         verifierPermissionInternet();
         verifierPermissionReadContact();
         verifierPermissionAccessFineLocation();
-        verifierPermissionServiceTelephone();
-
-        //String url = "http://projet_balat_monge.com/confirmerdv/" + mPhoneNumber;
-        //intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     }
 
-    /*
-        Permet d'envoyer le SMS contenant le rendez_vous géolocalisé
+    /**
+     * Permet d'envoyer le SMS contenant le rendez_vous géolocalisé
+     *
+     * On récupère d'abord le numéro de téléphone de la personne qui envoie le rendez_vous
+     * On créé le lien permettant au destinataire de confirmer ou refuser le rendez_vous
+     * On prépare le contenu du message
+     * On envoie le message pour chaque destinataire
+     * On affiche un toast pour dire si le message a été envoyé ou non
      */
     public void sendSms(View view) {
-
-        //On récupère ici le numéro de téléphone de la personne qui envoie le rendez_vous
         EditText monNumero = (EditText) findViewById(R.id.editTextMonNumero);
-        mPhoneNumber = monNumero.getText().toString();
+        String mPhoneNumber = monNumero.getText().toString();
 
-        //On créer ici le lien permettant au destinataire de confirmer ou refuser le rendez_vous
         String url = "http://projet_balat_monge.com/confirmerdv/" + mPhoneNumber;
-        intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        Intent intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 
-        //Prépatation du contenu du message
         EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
         String contenuMessage = getResources().getString(R.string.contenusms);
         String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
@@ -87,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
         try {
             SmsManager smgr = SmsManager.getDefault();
-            //Envoie du message pour chaque destinataire
             for (String numeroTel : parts) {
                 smgr.sendTextMessage(numeroTel, null, message, null, null);
             }
@@ -98,27 +88,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
-        Permet de choisir un contact parmis la liste de contact présent dans l'application de contact de l'utilisateur
+    /**
+     * Permet de choisir un contact dans la liste des contacts présent dans l'application de contact de l'utilisateur
     */
     public void choisirContact(View view){
         Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
-        // Permet de lister le nom des contacts
         pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-        startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
+        startActivityForResult(pickContactIntent, CHOISIR_CONTACT);
     }
 
     /*
-        Permet de vérifier la permission d'envoie de SMS
+        Permet de vérifier la permission d'envoi de SMS
      */
     private void verifierPermissionSms() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
-                // Ne rien faire
-            }
-
-            else {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
             }
         }
@@ -130,11 +115,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void  verifierPermissionReadContact(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
-                // Ne rien faire
-            }
-
-            else {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
             }
         }
@@ -146,11 +127,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void verifierPermissionInternet() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
-                // Ne rien faire
-            }
-
-            else {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
             }
         }
@@ -158,47 +135,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*
-        Permet de vérifier la permission d'acces à la localisation de l'utilisateur
-     */
+        Permet de vérifier la permission d'accès à la localisation de l'utilisateur
+    */
     private void verifierPermissionAccessFineLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                map.setMyLocationEnabled(true);
-                map.getUiSettings().setMyLocationButtonEnabled(true);
-
-            }
-
-            else {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                map.setMyLocationEnabled(false);
-                map.getUiSettings().setMyLocationButtonEnabled(false);
-            }
-        }
-    }
-
-
-    /*
-        Permet de vérifier la permission d'avoir des informations sur la téléphone de l'utilisateur
-        Cette partie ne sera pas utiliser dans notre projet vu qu'il est impossible de connaître le numéro de téléphone de l'utilisataur via les données de son téléphone
-     */
-    private void verifierPermissionServiceTelephone() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
-                TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-                mPhoneNumber = tMgr.getLine1Number();
-            }
-
-            else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
             }
         }
     }
 
     /*
-        Permet d'initialiser la position de l'utilisateur
-     */
+        Permet d'initialiser la localisation de l'utilisateur sur sa position actuelle
+    */
     private void initialiserLocalisation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
 
             @Override
@@ -212,61 +163,60 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*
-        Permet d'ouvrir la carte GoogleMaps avec les coordonées du rendez-vous
-     */
+    /**
+     * Permet d'ouvrir la carte GoogleMaps positionnées sur les dernières coordonnées sélectionnées (actuelle par défaut)
+    */
     public void ouvrirMap(View view) {
         intentMaps.putExtra("latitude", latitude);
         intentMaps.putExtra("longitude", longitude);
-        startActivityForResult(intentMaps, 1);
+        startActivityForResult(intentMaps, CHOISIR_LOCALISATION);
     }
 
+    /**
+     * Récupère des informations à la fermeture d'une activité
+     * Le cas où le resultCode est 1 permet de récupérer les coordonnées (longitude, latitude) choisies sur la carte
+     *
+     * Le cas où le resultCode est 2 permet de récupérer un contact qu'on a choisi dans l'application de contact
+     * On récupère le lien qui pointe vers le contact choisi
+     * On récupère les numéros de tous les contacts
+     * On cherche ensuite le numéro du contact qu'on a choisi
+     * On récupère le numéro et on l'insère dans la liste des destinataires
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
-            //Permet de récupérer la longitute et la latitude choisit sur la carte
-            case 1:
-                if (resultCode == 1) {
-                    if (data.hasExtra("point")) {
-                        LatLng point = (LatLng) data.getExtras().get("point");
-                        latitude = point.latitude;
-                        longitude = point.longitude;
-                        editerLatLong();
-                    }
-                }
-             // Permet de récupère le contact/destinaire sur lequel on a cliqué dans notre application de contact
-            case 2:
-                if (resultCode == RESULT_OK){
-                    // On récupère le lien qui pointe vers le contact que nous avons choisit
-                    Uri contactChoisitUri = data.getData();
-                    //On récupère les numérors des contacts
-                    String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER};
-
-                    // On cherche le numéro du contact que l'on a choisit
-                    Cursor cursor = getContentResolver().query(contactChoisitUri, projection, null, null, null);
-                    cursor.moveToFirst();
-
-                    // On recupère le numéro
-                    int recupNumero = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                    String numero = cursor.getString(recupNumero);
-
-                    // On insere le numéro dans l'EditText
-                    EditText editNum = (EditText) findViewById(R.id.editTextNumero);
-                    if (editNum.getText().length() < 1 ) {
-                        editNum.setText(numero);
-                    }
-                    else {
-                        editNum.setText(editNum.getText() + ";" + numero);
-                    }
-                }
+        if (resultCode == CHOISIR_LOCALISATION) {
+            if (data.hasExtra("point")) {
+                LatLng point = (LatLng) data.getExtras().get("point");
+                latitude = point.latitude;
+                longitude = point.longitude;
+                editerLatLong();
+            }
         }
+        if (resultCode == RESULT_OK){
+            Uri contactChoisiUri = data.getData();
 
+            String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER};
 
+            Cursor cursor = getContentResolver().query(contactChoisiUri, projection, null, null, null);
+            cursor.moveToFirst();
+
+            int recupNumero = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            String numero = cursor.getString(recupNumero);
+
+            EditText editNum = (EditText) findViewById(R.id.editTextNumero);
+            if (editNum.getText().length() < 1) {
+                editNum.setText(numero);
+            }
+            else {
+                String ajoutNouveauNumero = editNum.getText() + ";" + numero;
+                editNum.setText(ajoutNouveauNumero);
+            }
+        }
     }
 
     /*
         Permet de mettre à jour la latitude et la longitude
-     */
+    */
     private void editerLatLong() {
         textViewLatitude.setText(String.valueOf(latitude));
         textViewLongitude.setText(String.valueOf(longitude));

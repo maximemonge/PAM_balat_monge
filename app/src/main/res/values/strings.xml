@@ -7,7 +7,6 @@
     <string name="confirmationrdv">Confirmez votre présence ici : </string>
     <string name="label_oui">Oui</string>
     <string name="label_non">Non</string>
-    <string name="message_confirmation">Confirmez ici : </string>
     <string name="label_message_envoye">Message envoyé</string>
     <string name="label_erreur_envoi_sms">Échec : message non envoyé</string>
     <string name="label_choisir_coord_rdv">Choisir lieu</string>
@@ -18,5 +17,11 @@
     <string name="rdv_accepte">Vous avez accepté le rendez-vous !</string>
     <string name="sms_rdv_accepte">Je serai présent(e) au rendez-vous !</string>
     <string name="rdv_refuse">Vous avez accepté le rendez-vous !</string>
-    <string name="sms_rdv_refuse">Je ne serai pas présent(e) au rendez-vous !</string>
+    <string name="sms_rdv_refuse">Je ne serai pas présent(e) au rendez-vous </string>
+    <string name="label_choix_date">Veuillez definir la date du rendez-vous </string>
+    <string name="label_choix_heure">Veuillez definir l\'heure du rendez-vous !</string>
+    <string name="label_date_obligatoire">Vous devez impérativement choisir une date pour votre rendez-vous !</string>
+    <string name="label_heure_obligatoire">Vous devez impérativement choisir une heure pour votre rendez-vous !</string>
+    <string name="label_date">Entrez la date</string>
+    <string name="label_heure">Entrez l\'heure</string>
 </resources>

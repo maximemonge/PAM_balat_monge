@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         String contenuMessage = getResources().getString(R.string.contenusms);
         String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
         String messageUn = contenuMessage + locationChoisie;
-        String messageDeux = "Confirmez ici le rendez-vous du " + date + " à " + heure + " :" + intentConfirm.getData();
+        String messageDeux =  getResources().getString(R.string.label_message_confirmer) + " " + date + " à " + heure + " :" + intentConfirm.getData();
         String numero = numeroText.getText().toString();
         String[] parts = numero.split(";");
 

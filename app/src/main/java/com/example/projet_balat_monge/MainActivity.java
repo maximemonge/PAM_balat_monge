@@ -1,6 +1,8 @@
 package com.example.projet_balat_monge;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,9 +12,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
+import android.text.InputType;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +28,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -68,11 +75,17 @@ public class MainActivity extends AppCompatActivity {
         String url = "http://projet_balat_monge.com/confirmerdv/" + mPhoneNumber;
         Intent intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 
+        TextView mydate = (TextView) findViewById(R.id.textViewDate);
+        String date = mydate.getText().toString();
+
+        TextView hour = (TextView) findViewById(R.id.textViewHeure);
+        String heure = hour.getText().toString();
+
         EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
         String contenuMessage = getResources().getString(R.string.contenusms);
         String locationChoisie = "https://www.google.com/maps/place/" + latitude.toString() + "," + longitude.toString();
         String messageUn = contenuMessage + locationChoisie;
-        String messageDeux = getResources().getString(R.string.message_confirmation) + intentConfirm.getData();
+        String messageDeux =  getResources().getString(R.string.label_message_confirmer) + " " + date + " à " + heure + " :" + intentConfirm.getData();
         String numero = numeroText.getText().toString();
         String[] parts = numero.split(";");
 
@@ -98,6 +111,58 @@ public class MainActivity extends AppCompatActivity {
         Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
         pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
         startActivityForResult(pickContactIntent, CHOISIR_CONTACT);
+    }
+
+    /**
+     * Permet de choisir la date du rendez-vous
+     *
+     * On incremente le mois car il commence à 0 (0 = Janvier or nous voulons 1=Janvier)
+     */
+    public void choisirDate(View view){
+        System.out.println("Je peux choisir le date");
+
+        final TextView date =(TextView) findViewById(R.id.textViewDate);
+        date.setInputType(InputType.TYPE_NULL);
+
+        final Calendar calendar = Calendar.getInstance();
+        int jour = calendar.get(Calendar.DAY_OF_MONTH);
+        int mois = calendar.get(Calendar.MONTH);
+        int année = calendar.get(Calendar.YEAR);
+        // time picker dialog
+        DatePickerDialog picker = new DatePickerDialog(MainActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker tp, int sAnnee, int sMois, int sJour) {
+                        sMois = sMois +1 ;
+                        date.setText(sJour + "/" + sMois + "/" + sAnnee);
+                    }
+                }, année, mois, jour);
+        picker.show();
+
+    }
+
+    /**
+     * Permet de choisir l'heure du rendez-vous
+     */
+    public void choisirHeure(View view){
+        System.out.println("Je peux choisir le date");
+
+        final TextView heure =(TextView) findViewById(R.id.textViewHeure);
+        heure.setInputType(InputType.TYPE_NULL);
+
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        // time picker dialog
+        TimePickerDialog picker = new TimePickerDialog(MainActivity.this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+                        heure.setText(sHour + ":" + sMinute);
+                    }
+                }, hour, minutes, true);
+        picker.show();
+
     }
 
     /*

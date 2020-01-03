@@ -111,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(pickContactIntent, CHOISIR_CONTACT);
     }
 
+    /**
+     * Permet de choisir la date du rendez-vous
+     *
+     * On incremente le mois car il commence à 0 (0 = Janvier or nous voulons 1=Janvier)
+     */
     public void choisirDate(View view){
         System.out.println("Je peux choisir le date");
 
@@ -134,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Permet de choisir l'heure du rendez-vous
+     */
     public void choisirHeure(View view){
         System.out.println("Je peux choisir le date");
 

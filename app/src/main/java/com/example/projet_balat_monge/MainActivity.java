@@ -73,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
         String url = "http://projet_balat_monge.com/confirmerdv/" + mPhoneNumber;
         Intent intentConfirm = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 
-        EditText mydate = (EditText) findViewById(R.id.editTextDate);
+        TextView mydate = (TextView) findViewById(R.id.textViewDate);
         String date = mydate.getText().toString();
 
-        EditText hour = (EditText) findViewById(R.id.editTextHeure);
+        TextView hour = (TextView) findViewById(R.id.textViewHeure);
         String heure = hour.getText().toString();
 
         EditText numeroText = (EditText) findViewById(R.id.editTextNumero);
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     public void choisirDate(View view){
         System.out.println("Je peux choisir le date");
 
-        final EditText date =(EditText) findViewById(R.id.editTextDate);
+        final TextView date =(TextView) findViewById(R.id.textViewDate);
         date.setInputType(InputType.TYPE_NULL);
 
         final Calendar calendar = Calendar.getInstance();
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     public void choisirHeure(View view){
         System.out.println("Je peux choisir le date");
 
-        final EditText heure =(EditText) findViewById(R.id.editTextHeure);
+        final TextView heure =(TextView) findViewById(R.id.textViewHeure);
         heure.setInputType(InputType.TYPE_NULL);
 
         final Calendar calendar = Calendar.getInstance();

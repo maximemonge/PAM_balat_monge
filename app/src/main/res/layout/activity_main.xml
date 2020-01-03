@@ -64,8 +64,8 @@
             android:textColor="@color/orange"
             android:layout_marginTop="20dp"/>
 
-        <EditText
-            android:id="@+id/editTextDate"
+        <TextView
+            android:id="@+id/textViewDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -82,8 +82,8 @@
             android:layout_marginTop="20dp"/>
 
 
-        <EditText
-            android:id="@+id/editTextHeure"
+        <TextView
+            android:id="@+id/textViewHeure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

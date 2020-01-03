@@ -39,15 +39,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.intentMaps = new Intent(this, MapsActivity.class);
         setContentView(R.layout.activity_main);
-        initialiserLocalisation();
         latitude = 0.0;
         longitude = 0.0;
         textViewLatitude = (TextView) findViewById(R.id.textViewLat);
         textViewLongitude = (TextView) findViewById(R.id.textViewLong);
-        verifierPermissionSms();
-        verifierPermissionInternet();
-        verifierPermissionReadContact();
-        verifierPermissionAccessFineLocation();
+        verifierPermissions();
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        initialiserLocalisation();
     }
 
     /**
@@ -101,49 +103,8 @@ public class MainActivity extends AppCompatActivity {
     /*
     Permet de vérifier la permission d'envoi de SMS
     */
-    private void verifierPermissionSms() {
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
-            }
-        }
-    }
-
-
-    /*
-    Permet de vérifier la permission de lire les contacts
-    */
-    private void  verifierPermissionReadContact(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
-            }
-        }
-    }
-
-
-    /*
-    Permet de vérifier la permission d'accès à Internet
-    */
-    private void verifierPermissionInternet() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
-            }
-        }
-    }
-
-
-    /*
-    Permet de vérifier la permission d'accès à la localisation de l'utilisateur
-    */
-    private void verifierPermissionAccessFineLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-        }
+    private void verifierPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_CONTACTS, Manifest.permission.INTERNET, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
     }
 
     /*
@@ -221,5 +182,10 @@ public class MainActivity extends AppCompatActivity {
     private void editerLatLong() {
         textViewLatitude.setText(String.valueOf(latitude));
         textViewLongitude.setText(String.valueOf(longitude));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+            initialiserLocalisation();
     }
 }

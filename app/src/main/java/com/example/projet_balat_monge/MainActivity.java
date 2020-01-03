@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -116,27 +114,24 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Permet de choisir la date du rendez-vous
      *
-     * On incremente le mois car il commence à 0 (0 = Janvier or nous voulons 1=Janvier)
+     * On incremente le mois car il commence à 0 (0 = Janvier or nous voulons 1 = Janvier)
      */
     public void choisirDate(View view){
-        System.out.println("Je peux choisir le date");
-
-        final TextView date =(TextView) findViewById(R.id.textViewDate);
-        date.setInputType(InputType.TYPE_NULL);
+        final TextView textViewDate =(TextView) findViewById(R.id.textViewDate);
+        textViewDate.setInputType(InputType.TYPE_NULL);
 
         final Calendar calendar = Calendar.getInstance();
-        int jour = calendar.get(Calendar.DAY_OF_MONTH);
-        int mois = calendar.get(Calendar.MONTH);
-        int année = calendar.get(Calendar.YEAR);
-        // time picker dialog
+        int jourCalendrier = calendar.get(Calendar.DAY_OF_MONTH);
+        int moisCalendrier = calendar.get(Calendar.MONTH);
+        int annéeCalendrier = calendar.get(Calendar.YEAR);
         DatePickerDialog picker = new DatePickerDialog(MainActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker tp, int sAnnee, int sMois, int sJour) {
                         sMois = sMois +1 ;
-                        date.setText(sJour + "/" + sMois + "/" + sAnnee);
+                        textViewDate.setText(sJour + "/" + sMois + "/" + sAnnee);
                     }
-                }, année, mois, jour);
+                }, annéeCalendrier, moisCalendrier, jourCalendrier);
         picker.show();
 
     }
@@ -145,22 +140,19 @@ public class MainActivity extends AppCompatActivity {
      * Permet de choisir l'heure du rendez-vous
      */
     public void choisirHeure(View view){
-        System.out.println("Je peux choisir le date");
-
-        final TextView heure =(TextView) findViewById(R.id.textViewHeure);
-        heure.setInputType(InputType.TYPE_NULL);
+        final TextView textViewHeure =(TextView) findViewById(R.id.textViewHeure);
+        textViewHeure.setInputType(InputType.TYPE_NULL);
 
         final Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = calendar.get(Calendar.MINUTE);
-        // time picker dialog
+        int heureCalendrier = calendar.get(Calendar.HOUR_OF_DAY);
+        int minuteCalendrier = calendar.get(Calendar.MINUTE);
         TimePickerDialog picker = new TimePickerDialog(MainActivity.this,
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
-                    public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                        heure.setText(sHour + ":" + sMinute);
+                    public void onTimeSet(TimePicker tp, int sHeure, int sMinute) {
+                        textViewHeure.setText(sHeure + ":" + sMinute);
                     }
-                }, hour, minutes, true);
+                }, heureCalendrier, minuteCalendrier, true);
         picker.show();
 
     }
@@ -249,8 +241,11 @@ public class MainActivity extends AppCompatActivity {
         textViewLongitude.setText(String.valueOf(longitude));
     }
 
+    /*
+    Permet d'initialiser la localisation quand la permission d'accéder à la position de l'utilisateur est acceptée
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-            initialiserLocalisation();
+        initialiserLocalisation();
     }
 }

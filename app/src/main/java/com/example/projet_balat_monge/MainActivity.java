@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.intentMaps = new Intent(this, MapsActivity.class);
         setContentView(R.layout.activity_main);
-        latitude = 0.0;
-        longitude = 0.0;
         textViewLatitude = (TextView) findViewById(R.id.textViewLat);
         textViewLongitude = (TextView) findViewById(R.id.textViewLong);
         verifierPermissions();
@@ -54,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        initialiserLocalisation();
+        if (latitude == null || longitude == null) {
+            initialiserLocalisation();
+        }
     }
 
     /**
